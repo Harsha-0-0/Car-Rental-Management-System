@@ -1,0 +1,16 @@
+[
+  {
+    "CarId": 1,
+    "Brand": "Toyota",
+    "Model": "Corolla",
+    "PricePerDay": 50,
+    "ImagePath": "Images/toyota.jpg"
+  },
+  {
+    "CarId": 2,
+    "Brand": "Honda",
+    "Model": "Civic",
+    "PricePerDay": 55,
+    "ImagePath": "Images/honda.jpg"
+  }
+]

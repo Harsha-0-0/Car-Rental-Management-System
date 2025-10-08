@@ -80,6 +80,7 @@
             buttonRent.TabIndex = 4;
             buttonRent.Text = "Rent This Car";
             buttonRent.UseVisualStyleBackColor = true;
+            buttonRent.Click += btnRent_Click;
             // 
             // CarDetailsForm
             // 

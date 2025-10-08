@@ -32,9 +32,17 @@ namespace Car_Rental_Management_System.Forms
 
         private void btnRent_Click(object sender, EventArgs e)
         {
-            //var rentalForm = new RentalForm(selectedCar);
-            //rentalForm.ShowDialog();
+            try
+            {
+                var rentalForm = new RentalForm(selectedCar);
+                rentalForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening RentalForm: " + ex.Message);
+            }
         }
 
+        
     }
 }
