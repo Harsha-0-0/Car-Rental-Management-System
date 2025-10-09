@@ -77,7 +77,7 @@ namespace Car_Rental_Management_System.Forms
 
         private void SaveRentalToFile(Rental rental)
         {
-            string filePath = Path.Combine(Application.StartupPath, "rentals.json");
+            string filePath = Path.Combine(Application.StartupPath, "rentals.txt");
             string line = $"{rental.RentalId},{rental.CustomerName},{rental.RentedCar.Brand},{rental.RentedCar.Model},{rental.StartDate},{rental.EndDate},{rental.TotalPrice}";
             File.AppendAllText(filePath, line + Environment.NewLine);
         }

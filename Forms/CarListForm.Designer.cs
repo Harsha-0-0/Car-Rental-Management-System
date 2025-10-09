@@ -30,16 +30,17 @@
         {
             flowLayoutPanel1 = new FlowLayoutPanel();
             SuspendLayout();
-
             // 
             // flowLayoutPanel1
             // 
-            flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.AutoScroll = true;
-            flowLayoutPanel1.WrapContents = true;
-            flowLayoutPanel1.Padding = new Padding(20);
             flowLayoutPanel1.BackColor = Color.LightGray;
-
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.Location = new Point(0, 0);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Padding = new Padding(20);
+            flowLayoutPanel1.Size = new Size(1200, 600);
+            flowLayoutPanel1.TabIndex = 0;
             // 
             // CarListForm
             // 
@@ -60,7 +61,5 @@
         private Label label2;
         private Label label1;
         private PictureBox pictureBox1;
-
-
     }
 }

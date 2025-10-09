@@ -16,6 +16,23 @@ namespace Car_Rental_Management_System.Forms
         public CarListForm()
         {
             InitializeComponent();
+            var btnOrderHistory = new Button
+            {
+                Text = "Order History",
+                Width = 120,
+                Height = 32,
+                Top = 12,
+                Left = 12
+            };
+            btnOrderHistory.Click += (s, e) =>
+            {
+                using (var f = new Car_Rental_Management_System.Forms.OrderHistory())
+                {
+                    f.ShowDialog(this);
+                }
+            };
+            this.Controls.Add(btnOrderHistory);
+
             LoadCarsGallery();
         }
 
@@ -49,6 +66,22 @@ namespace Car_Rental_Management_System.Forms
                 MessageBox.Show("No cars found in the JSON file.");
                 return;
             }
+
+            Button orderHistoryButton = new Button
+            {
+                Text = "View Order History",
+                Width = 140,
+                Height = 35,
+                Top = 240,
+                Left = 40,
+                BackColor = Color.LightSkyBlue,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                Tag = "orderhistory"
+            };
+            orderHistoryButton.Click += Btn_ViewHistory;
+            flowLayoutPanel1.Controls.Add(orderHistoryButton);
+
 
             foreach (var car in cars)
             {
@@ -123,7 +156,9 @@ namespace Car_Rental_Management_System.Forms
 
                 // Add card to FlowLayoutPanel
                 flowLayoutPanel1.Controls.Add(card);
+               
             }
+          
 
             // FlowLayoutPanel styling
             flowLayoutPanel1.BackColor = Color.LightGray;
@@ -143,6 +178,13 @@ namespace Car_Rental_Management_System.Forms
         }
 
 
+        private void Btn_ViewHistory(object sender, EventArgs e)
+        {
+
+            var detailsForm = new OrderHistory();
+            detailsForm.ShowDialog();
+        }
+
         private void btnViewDetails_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -151,5 +193,7 @@ namespace Car_Rental_Management_System.Forms
             var detailsForm = new CarDetailsForm(selectedCar);
             detailsForm.ShowDialog();
         }
+
+        
     }
 }

@@ -42,7 +42,5 @@ namespace Car_Rental_Management_System.Forms
                 MessageBox.Show("Error opening RentalForm: " + ex.Message);
             }
         }
-
-        
     }
 }
