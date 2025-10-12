@@ -16,25 +16,62 @@ namespace Car_Rental_Management_System.Forms
         public CarListForm()
         {
             InitializeComponent();
-            var btnOrderHistory = new Button
-            {
-                Text = "Order History",
-                Width = 120,
-                Height = 32,
-                Top = 12,
-                Left = 12
-            };
-            btnOrderHistory.Click += (s, e) =>
-            {
-                using (var f = new Car_Rental_Management_System.Forms.OrderHistory())
-                {
-                    f.ShowDialog(this);
-                }
-            };
-            this.Controls.Add(btnOrderHistory);
+
+            CreateMenu();
 
             LoadCarsGallery();
         }
+
+        private void CreateMenu()
+        {
+            // Create menu strip
+            MenuStrip menuStrip = new MenuStrip();
+            this.MainMenuStrip = menuStrip;
+
+            // Create top-level menu items
+            ToolStripMenuItem addCarMenu = new ToolStripMenuItem("Add New Car");
+            ToolStripMenuItem orderHistoryMenu = new ToolStripMenuItem("Order History");
+            ToolStripMenuItem exitMenu = new ToolStripMenuItem("Exit");
+
+
+            // Assign click events
+            addCarMenu.Click += AddCarItem_Click;
+            orderHistoryMenu.Click += OrderHistoryItem_Click;
+            exitMenu.Click += (s, e) => this.Close();
+
+            // directly to the menu bar
+            menuStrip.Items.Add(addCarMenu);
+            menuStrip.Items.Add(orderHistoryMenu);
+            menuStrip.Items.Add(exitMenu);
+
+
+            // Add MenuStrip to the form
+            this.Controls.Add(menuStrip);
+            menuStrip.Dock = DockStyle.Top;
+            menuStrip.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            menuStrip.BackColor = Color.WhiteSmoke;
+
+        }
+
+
+        private void AddCarItem_Click(object sender, EventArgs e)
+        {
+            var addCarForm = new AddCarForm();  
+            if (addCarForm.ShowDialog() == DialogResult.OK)
+            {
+                LoadCarsGallery(); // refresh the car list after adding a new car
+            }
+        }
+
+        private void OrderHistoryItem_Click(object sender, EventArgs e)
+        {
+            using (var historyForm = new OrderHistory())
+            {
+                historyForm.ShowDialog();
+            }
+        }
+
+
 
         private void LoadCarsGallery()
         {
@@ -67,20 +104,7 @@ namespace Car_Rental_Management_System.Forms
                 return;
             }
 
-            Button orderHistoryButton = new Button
-            {
-                Text = "View Order History",
-                Width = 140,
-                Height = 35,
-                Top = 240,
-                Left = 40,
-                BackColor = Color.LightSkyBlue,
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                Tag = "orderhistory"
-            };
-            orderHistoryButton.Click += Btn_ViewHistory;
-            flowLayoutPanel1.Controls.Add(orderHistoryButton);
+           
 
 
             foreach (var car in cars)

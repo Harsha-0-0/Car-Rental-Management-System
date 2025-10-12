@@ -18,7 +18,17 @@ namespace Car_Rental_Management_System.Forms
                 labelCar.Text = $"{selectedCar.Brand} {selectedCar.Model}";
                 labelPricePerDay.Text = $"${selectedCar.PricePerDay}/day";
 
-                btnCalculate.Click += BtnCalculate_Click;
+                // Default to today and tomorrow
+                dtpStartDate.Value = DateTime.Today;
+                dtpEndDate.Value = DateTime.Today.AddDays(1);
+
+                // Hook up event handlers to update total dynamically
+                dtpStartDate.ValueChanged += DateChanged;
+                dtpEndDate.ValueChanged += DateChanged;
+
+                // Calculate once on load
+                CalculateTotalCost();
+
                 btnConfirmRental.Click += BtnConfirmRental_Click;
             }
             catch (Exception ex)
@@ -27,18 +37,33 @@ namespace Car_Rental_Management_System.Forms
             }
         }
 
-
-        private void BtnCalculate_Click(object sender, EventArgs e)
+        private void DateChanged(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtDays.Text, out int days) || days <= 0)
+            CalculateTotalCost();
+        }
+
+        private void CalculateTotalCost()
+        {
+            if (dtpEndDate.Value.Date < dtpStartDate.Value.Date)
             {
-                MessageBox.Show("Please enter a valid number of days.");
+                labelTotalPrice.Text = "Invalid Dates";
+                labelTotalPrice.ForeColor = System.Drawing.Color.Red;
                 return;
             }
 
+            // Calculate number of days
+            TimeSpan duration = dtpEndDate.Value.Date - dtpStartDate.Value.Date;
+            int days = duration.Days == 0 ? 1 : duration.Days; // at least 1 day
+
+            // Calculate total
             decimal total = days * selectedCar.PricePerDay;
-            labelTotalPrice.Text = $"Total Price: ${total:F2}"; // show 2 decimal places
+
+            labelTotalPrice.ForeColor = System.Drawing.Color.Black;
+            labelTotalPrice.Text = $"Total: ${total}";
         }
+
+
+
 
 
         private void BtnConfirmRental_Click(object sender, EventArgs e)
@@ -46,20 +71,29 @@ namespace Car_Rental_Management_System.Forms
             string customerName = txtCustomerName.Text.Trim();
             if (string.IsNullOrEmpty(customerName))
             {
-                MessageBox.Show("Please enter customer name.");
+                MessageBox.Show("Please enter customer name.", "Missing Info",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!int.TryParse(txtDays.Text, out int days) || days <= 0)
+            DateTime startDate = dtpStartDate.Value.Date;
+            DateTime endDate = dtpEndDate.Value.Date;
+
+            if (endDate < startDate)
             {
-                MessageBox.Show("Please enter a valid number of days.");
+                MessageBox.Show("End date cannot be before start date.", "Invalid Dates",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DateTime startDate = DateTime.Now;
-            DateTime endDate = startDate.AddDays(days);
+            // Calculate rental duration
+            TimeSpan duration = endDate - startDate;
+            int days = duration.Days == 0 ? 1 : duration.Days; // minimum 1 day
+
+            // Calculate total cost
             decimal totalPrice = days * selectedCar.PricePerDay;
 
+            // Create rental record
             Rental rental = new Rental
             {
                 RentalId = new Random().Next(1000, 9999),
@@ -70,10 +104,18 @@ namespace Car_Rental_Management_System.Forms
                 TotalPrice = totalPrice
             };
 
+            // Save rental info (you can later connect this to file or DB)
             SaveRentalToFile(rental);
-            MessageBox.Show("Rental confirmed!");
+
+            MessageBox.Show($"Rental confirmed for {customerName}!\n" +
+                            $"Car: {selectedCar.Brand} {selectedCar.Model}\n" +
+                            $"Total: ${totalPrice}",
+                            "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
             this.Close();
         }
+
 
         private void SaveRentalToFile(Rental rental)
         {

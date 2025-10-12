@@ -34,7 +34,14 @@ namespace Car_Rental_Management_System.Forms
         {
             try
             {
+                // Create rental form *before* closing this one
                 var rentalForm = new RentalForm(selectedCar);
+
+                // Close this details form first
+                this.Hide();     // hide first (optional: avoids flicker)
+                this.Close();    // close this form
+
+                // Now show the rental form
                 rentalForm.ShowDialog();
             }
             catch (Exception ex)
