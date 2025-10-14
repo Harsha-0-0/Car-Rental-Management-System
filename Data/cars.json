@@ -12,5 +12,15 @@
     "Model": "Civic",
     "PricePerDay": 55,
     "ImagePath": "Images/honda.jpg"
-  }
+  },
+    {
+      "CarId": 3,
+      "Brand": "BMW",
+      "Model": "X5",
+      "PricePerDay": 120,
+      "ImagePath": "Images/bmw.jpg",
+      "LuxuryTaxRate": 0.2
+    }
+  
+
 ]

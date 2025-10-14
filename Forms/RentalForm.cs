@@ -1,4 +1,6 @@
-﻿using Car_Rental_Management_System.Models;
+﻿using Car_Rental_Management_System.Data;
+using Car_Rental_Management_System.Interface;
+using Car_Rental_Management_System.Models;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -25,6 +27,16 @@ namespace Car_Rental_Management_System.Forms
                 // Hook up event handlers to update total dynamically
                 dtpStartDate.ValueChanged += DateChanged;
                 dtpEndDate.ValueChanged += DateChanged;
+
+                if (selectedCar is LuxuryCar luxury)
+                {
+                    labelLuxury.Text = $"Luxury Tax: {luxury.LuxuryTaxRate:P0}";
+                    labelLuxury.Visible = true;
+                }
+                else
+                {
+                    labelLuxury.Visible = false;
+                }
 
                 // Calculate once on load
                 CalculateTotalCost();
@@ -55,12 +67,13 @@ namespace Car_Rental_Management_System.Forms
             TimeSpan duration = dtpEndDate.Value.Date - dtpStartDate.Value.Date;
             int days = duration.Days == 0 ? 1 : duration.Days; // at least 1 day
 
-            // Calculate total
-            decimal total = days * selectedCar.PricePerDay;
+           
+            decimal total = selectedCar.GetTotalPrice(days);
 
             labelTotalPrice.ForeColor = System.Drawing.Color.Black;
-            labelTotalPrice.Text = $"Total: ${total}";
+            labelTotalPrice.Text = $"Total: ${total:F2}";
         }
+
 
 
 
@@ -90,8 +103,11 @@ namespace Car_Rental_Management_System.Forms
             TimeSpan duration = endDate - startDate;
             int days = duration.Days == 0 ? 1 : duration.Days; // minimum 1 day
 
-            // Calculate total cost
-            decimal totalPrice = days * selectedCar.PricePerDay;
+
+            PriceCalculateInterface pricedCar = selectedCar;
+            decimal total = pricedCar.CalculatePrice(selectedCar.PricePerDay, days);
+
+
 
             // Create rental record
             Rental rental = new Rental
@@ -101,15 +117,15 @@ namespace Car_Rental_Management_System.Forms
                 CustomerName = customerName,
                 StartDate = startDate,
                 EndDate = endDate,
-                TotalPrice = totalPrice
+                TotalPrice = total
             };
 
-            // Save rental info (you can later connect this to file or DB)
+            // Save rental info
             SaveRentalToFile(rental);
 
             MessageBox.Show($"Rental confirmed for {customerName}!\n" +
                             $"Car: {selectedCar.Brand} {selectedCar.Model}\n" +
-                            $"Total: ${totalPrice}",
+                            $"Total: ${total}",
                             "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
@@ -119,10 +135,14 @@ namespace Car_Rental_Management_System.Forms
 
         private void SaveRentalToFile(Rental rental)
         {
-            string filePath = Path.Combine(Application.StartupPath, "rentals.txt");
-            string line = $"{rental.RentalId},{rental.CustomerName},{rental.RentedCar.Brand},{rental.RentedCar.Model},{rental.StartDate},{rental.EndDate},{rental.TotalPrice}";
-            File.AppendAllText(filePath, line + Environment.NewLine);
+            string filePath = Path.Combine(Application.StartupPath, "Data", "rentals.json");
+            var repo = new Repository<Rental>(filePath);
+
+            var rentals = repo.Load();
+            rentals.Add(rental);
+            repo.Save(rentals);
         }
+
 
     }
 }

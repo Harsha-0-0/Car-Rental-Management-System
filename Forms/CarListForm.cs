@@ -1,4 +1,5 @@
-﻿using Car_Rental_Management_System.Models;
+﻿using Car_Rental_Management_System.Data;
+using Car_Rental_Management_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,13 +20,41 @@ namespace Car_Rental_Management_System.Forms
 
             CreateMenu();
 
+            CreateDropdown();
+
             LoadCarsGallery();
         }
 
+        
+        MenuStrip menuStrip = new MenuStrip();
+        private void CreateDropdown()
+        {
+            comboBox1 = new ComboBox
+            {
+                Width = 180,
+                Left = 10,
+                Top = menuStrip.Bottom + 5,
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+
+            comboBox1.Items.Add("All Cars");
+            comboBox1.Items.Add("Luxury Cars Only");
+            comboBox1.Items.Add("Standard Cars Only");
+            comboBox1.Items.Add("Sort by Price (Low → High)");
+            comboBox1.Items.Add("Sort by Price (High → Low)");
+            comboBox1.SelectedIndex = 0;
+
+
+            comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
+
+            this.Controls.Add(comboBox1);
+            comboBox1.BringToFront();
+        }
+
+
         private void CreateMenu()
         {
-            // Create menu strip
-            MenuStrip menuStrip = new MenuStrip();
+            
             this.MainMenuStrip = menuStrip;
 
             // Create top-level menu items
@@ -71,44 +100,115 @@ namespace Car_Rental_Management_System.Forms
             }
         }
 
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cars == null) return;
+
+            List<Car> filteredList = cars.ToList();
+
+            switch (comboBox1.SelectedItem.ToString())
+            {
+                case "Luxury Cars Only":
+                    filteredList = filteredList.Where(c => c is LuxuryCar).ToList();
+                    break;
+
+                case "Standard Cars Only":
+                    filteredList = filteredList.Where(c => c is not LuxuryCar).ToList();
+                    break;
+
+                case "Sort by Price (Low → High)":
+                    filteredList = filteredList.OrderBy(c => c.PricePerDay).ToList();
+                    break;
+
+                case "Sort by Price (High → Low)":
+                    filteredList = filteredList.OrderByDescending(c => c.PricePerDay).ToList();
+                    break;
+
+                case "All Cars":
+                default:
+                    break;
+            }
+
+            BuildCarsGallery(filteredList);
+        }
+
+        private Repository<Car> carRepo;
+
+        
+private void LoadCarsGallery()
+    {
+        flowLayoutPanel1.Controls.Clear();
+
+        string filePath = Path.Combine(Application.StartupPath, "Data", "cars.json");
+        carRepo = new Repository<Car>(filePath);
+
+        cars = new List<Car>();
+
+        // If file doesn't exist
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("Cars data file not found!");
+            return;
+        }
+
+        try
+        {
+            // Read the JSON manually to handle both Car and LuxuryCar
+            string json = File.ReadAllText(filePath);
+            JsonDocument doc = JsonDocument.Parse(json);
+
+            foreach (var element in doc.RootElement.EnumerateArray())
+            {
+                if (element.TryGetProperty("LuxuryTaxRate", out var taxProp))
+                {
+                    cars.Add(new LuxuryCar
+                    {
+                        CarId = element.GetProperty("CarId").GetInt32(),
+                        Brand = element.GetProperty("Brand").GetString(),
+                        Model = element.GetProperty("Model").GetString(),
+                        PricePerDay = element.GetProperty("PricePerDay").GetDecimal(),
+                        ImagePath = element.GetProperty("ImagePath").GetString(),
+                        LuxuryTaxRate = taxProp.GetDecimal()
+                    });
+                }
+                else
+                {
+                    cars.Add(new Car
+                    {
+                        CarId = element.GetProperty("CarId").GetInt32(),
+                        Brand = element.GetProperty("Brand").GetString(),
+                        Model = element.GetProperty("Model").GetString(),
+                        PricePerDay = element.GetProperty("PricePerDay").GetDecimal(),
+                        ImagePath = element.GetProperty("ImagePath").GetString()
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error reading cars.json: " + ex.Message);
+            return;
+        }
+
+        if (cars.Count == 0)
+        {
+            MessageBox.Show("No cars found in the JSON file.");
+            return;
+        }
+
+        // Continue building the gallery as before
+        BuildCarsGallery(cars);
+    }
 
 
-        private void LoadCarsGallery()
+    private void BuildCarsGallery(List<Car> carList)
         {
             flowLayoutPanel1.Controls.Clear();
 
-            // Load cars from JSON
-            string filePath = Path.Combine(Application.StartupPath, "Data", "cars.json");
-            cars = new List<Car>();
-
-            if (!File.Exists(filePath))
+            foreach (var car in carList)
             {
-                MessageBox.Show("Cars data file not found!");
-                return;
-            }
+                
 
-            try
-            {
-                string json = File.ReadAllText(filePath);
-                cars = JsonSerializer.Deserialize<List<Car>>(json);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error reading cars.json: " + ex.Message);
-                return;
-            }
-
-            if (cars == null || cars.Count == 0)
-            {
-                MessageBox.Show("No cars found in the JSON file.");
-                return;
-            }
-
-           
-
-
-            foreach (var car in cars)
-            {
                 // Card panel
                 Panel card = new Panel
                 {
@@ -118,6 +218,21 @@ namespace Car_Rental_Management_System.Forms
                     BackColor = Color.White,
                     BorderStyle = BorderStyle.FixedSingle
                 };
+                if (car is LuxuryCar luxury)
+                {
+                    card.BackColor = Color.LightGoldenrodYellow;
+
+                    Label lblLuxury = new Label
+                    {
+                        Text = "LUXURY",
+                        ForeColor = Color.DarkGoldenrod,
+                        Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                        Width = 220,
+                        Top = 10,
+                        TextAlign = ContentAlignment.TopCenter
+                    };
+                    card.Controls.Add(lblLuxury);
+                }
 
                 // Car image
                 PictureBox pic = new PictureBox
@@ -161,8 +276,7 @@ namespace Car_Rental_Management_System.Forms
                     ForeColor = Color.DarkGreen
                 };
                 card.Controls.Add(lblPrice);
-
-                // View Details button
+                // Example for button:
                 Button btn = new Button
                 {
                     Text = "View Details",
@@ -178,18 +292,10 @@ namespace Car_Rental_Management_System.Forms
                 btn.Click += Btn_Click;
                 card.Controls.Add(btn);
 
-                // Add card to FlowLayoutPanel
                 flowLayoutPanel1.Controls.Add(card);
-               
             }
-          
-
-            // FlowLayoutPanel styling
-            flowLayoutPanel1.BackColor = Color.LightGray;
-            flowLayoutPanel1.WrapContents = true;
-            flowLayoutPanel1.AutoScroll = true;
-            flowLayoutPanel1.Dock = DockStyle.Fill;
         }
+
 
 
         private void Btn_Click(object sender, EventArgs e)

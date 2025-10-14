@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Car_Rental_Management_System.Data;
+using Car_Rental_Management_System.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -10,7 +12,10 @@ namespace Car_Rental_Management_System.Forms
 {
     public partial class OrderHistory : Form
     {
-        private readonly string rentalsPath = Path.Combine(Application.StartupPath, "rentals.txt");
+        private readonly string rentalsPath = Path.Combine(Application.StartupPath, "Data", "rentals.json");
+
+
+
 
         public OrderHistory()
         {
@@ -31,41 +36,65 @@ namespace Car_Rental_Management_System.Forms
         {
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                if (File.Exists(rentalsPath))
                 {
-                    FileName = Application.StartupPath,
-                    UseShellExecute = true
-                });
+                    // Open Explorer and highlight the rentals.json file
+                    System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{rentalsPath}\"");
+                }
+                else
+                {
+                    MessageBox.Show($"File not found: {rentalsPath}", "File Missing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not open folder: " + ex.Message);
+                MessageBox.Show("Could not open file location: " + ex.Message);
             }
         }
+
+
 
         private void LoadOrders()
         {
             try
             {
-                if (!File.Exists(rentalsPath))
+                string filePath = Path.Combine(Application.StartupPath, "Data", "rentals.json");
+                var repo = new Repository<Rental>(filePath);
+                var rentals = repo.Load();
+
+                if (rentals == null || rentals.Count == 0)
                 {
                     dgvOrders.DataSource = null;
-                    lblSummary.Text = $"No rentals file found at: {rentalsPath}";
+                    lblSummary.Text = "No rentals found.";
                     return;
                 }
 
-                var rows = new BindingList<OrderRow>(ReadFile(rentalsPath));
-                dgvOrders.DataSource = rows;
+                // ✅ Flatten nested objects for DataGridView
+                var displayList = rentals.Select(r => new
+                {
+                    r.RentalId,
+                    r.CustomerName,
+                    Brand = r.RentedCar?.Brand ?? "N/A",
+                    Model = r.RentedCar?.Model ?? "N/A",
+                    r.StartDate,
+                    r.EndDate,
+                    r.TotalPrice
+                })
+                .OrderByDescending(r => r.StartDate)
+                .ToList();
 
-                var totalRevenue = rows.Sum(r => r.TotalPrice);
-                lblSummary.Text = $"Loaded {rows.Count:N0} orders | Total revenue: ${totalRevenue:N2} | File: {rentalsPath}";
+                dgvOrders.DataSource = displayList;
+
+                var totalRevenue = displayList.Sum(r => r.TotalPrice);
+                lblSummary.Text = $"Loaded {displayList.Count:N0} orders | Total revenue: ${totalRevenue:N2}";
             }
             catch (Exception ex)
             {
-                dgvOrders.DataSource = null;
-                lblSummary.Text = "Error loading orders: " + ex.Message;
+                MessageBox.Show("Error loading rentals: " + ex.Message);
             }
         }
+
+
 
         private static List<OrderRow> ReadFile(string path)
         {

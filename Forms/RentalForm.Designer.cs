@@ -40,6 +40,7 @@
             label3 = new Label();
             label4 = new Label();
             textBox1 = new TextBox();
+            labelLuxury = new Label();
             SuspendLayout();
             // 
             // labelCar
@@ -143,11 +144,21 @@
             textBox1.Size = new Size(125, 27);
             textBox1.TabIndex = 13;
             // 
+            // labelLuxury
+            // 
+            labelLuxury.AutoSize = true;
+            labelLuxury.Location = new Point(197, 421);
+            labelLuxury.Name = "labelLuxury";
+            labelLuxury.Size = new Size(50, 20);
+            labelLuxury.TabIndex = 14;
+            labelLuxury.Text = "label5";
+            // 
             // RentalForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(labelLuxury);
             Controls.Add(textBox1);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -180,5 +191,6 @@
         private Label label3;
         private Label label4;
         private TextBox textBox1;
+        private Label labelLuxury;
     }
 }

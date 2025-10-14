@@ -29,18 +29,31 @@
         private void InitializeComponent()
         {
             flowLayoutPanel1 = new FlowLayoutPanel();
+            comboBox1 = new ComboBox();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.BackColor = Color.LightGray;
+            flowLayoutPanel1.Controls.Add(comboBox1);
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(20);
             flowLayoutPanel1.Size = new Size(1200, 600);
             flowLayoutPanel1.TabIndex = 0;
+            // 
+            // comboBox1
+            // 
+            comboBox1.Dock = DockStyle.Top;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(23, 23);
+            comboBox1.Name = "comboBox1";
+            comboBox1.RightToLeft = RightToLeft.No;
+            comboBox1.Size = new Size(151, 28);
+            comboBox1.TabIndex = 0;
             // 
             // CarListForm
             // 
@@ -50,6 +63,7 @@
             Controls.Add(flowLayoutPanel1);
             Name = "CarListForm";
             Text = "Available Cars";
+            flowLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -61,5 +75,6 @@
         private Label label2;
         private Label label1;
         private PictureBox pictureBox1;
+        private ComboBox comboBox1;
     }
 }

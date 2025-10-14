@@ -39,6 +39,7 @@
             btnBrowse = new Button();
             btnSave = new Button();
             btnCancel = new Button();
+            checkBox1 = new CheckBox();
             SuspendLayout();
             // 
             // lblBrand
@@ -132,11 +133,22 @@
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
             // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(630, 204);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(73, 24);
+            checkBox1.TabIndex = 11;
+            checkBox1.Text = "Luxury";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
             // AddCarForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkBox1);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(btnBrowse);
@@ -167,5 +179,6 @@
         private Button btnBrowse;
         private Button btnSave;
         private Button btnCancel;
+        private CheckBox checkBox1;
     }
 }

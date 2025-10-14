@@ -37,7 +37,6 @@ namespace Car_Rental_Management_System.Forms
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            // Validate input
             if (string.IsNullOrWhiteSpace(txtBrand.Text) ||
                 string.IsNullOrWhiteSpace(txtModel.Text) ||
                 string.IsNullOrWhiteSpace(txtPrice.Text) ||
@@ -53,51 +52,116 @@ namespace Car_Rental_Management_System.Forms
                 return;
             }
 
-            // Load existing cars
             List<Car> cars = new List<Car>();
+
+            // 🟢 Read existing JSON manually to preserve LuxuryCar objects
             if (File.Exists(carsFilePath))
             {
                 string json = File.ReadAllText(carsFilePath);
-                cars = JsonSerializer.Deserialize<List<Car>>(json) ?? new List<Car>();
+                JsonDocument doc = JsonDocument.Parse(json);
+
+                foreach (var element in doc.RootElement.EnumerateArray())
+                {
+                    if (element.TryGetProperty("LuxuryTaxRate", out var taxProp))
+                    {
+                        cars.Add(new LuxuryCar
+                        {
+                            CarId = element.GetProperty("CarId").GetInt32(),
+                            Brand = element.GetProperty("Brand").GetString(),
+                            Model = element.GetProperty("Model").GetString(),
+                            PricePerDay = element.GetProperty("PricePerDay").GetDecimal(),
+                            ImagePath = element.GetProperty("ImagePath").GetString(),
+                            LuxuryTaxRate = taxProp.GetDecimal()
+                        });
+                    }
+                    else
+                    {
+                        cars.Add(new Car
+                        {
+                            CarId = element.GetProperty("CarId").GetInt32(),
+                            Brand = element.GetProperty("Brand").GetString(),
+                            Model = element.GetProperty("Model").GetString(),
+                            PricePerDay = element.GetProperty("PricePerDay").GetDecimal(),
+                            ImagePath = element.GetProperty("ImagePath").GetString()
+                        });
+                    }
+                }
             }
 
-            // Ensure Images folder exists
+            // Ensure /Images folder exists
             string destinationFolder = Path.Combine(Application.StartupPath, "Images");
             Directory.CreateDirectory(destinationFolder);
 
-            // Copy image into /Images
+            // Copy image
             string imageFileName = Path.GetFileName(selectedImageFullPath);
             string destinationPath = Path.Combine(destinationFolder, imageFileName);
-
-            // Avoid overwriting unless needed
             if (!File.Exists(destinationPath))
             {
                 File.Copy(selectedImageFullPath, destinationPath);
             }
 
-            // Save relative path
             string relativeImagePath = $"Images/{imageFileName}";
 
-            // Create new car
-            Car newCar = new Car
+            Car newCar;
+
+            if (checkBox1.Checked)
             {
-                CarId = cars.Count > 0 ? cars[^1].CarId + 1 : 1,
-                Brand = txtBrand.Text.Trim(),
-                Model = txtModel.Text.Trim(),
-                PricePerDay = price,
-                ImagePath = relativeImagePath
-            };
+                newCar = new LuxuryCar
+                {
+                    CarId = cars.Count > 0 ? cars[^1].CarId + 1 : 1,
+                    Brand = txtBrand.Text.Trim(),
+                    Model = txtModel.Text.Trim(),
+                    PricePerDay = price,
+                    ImagePath = relativeImagePath,
+                    LuxuryTaxRate = 0.15m  // or allow user to enter custom value
+                };
+            }
+            else
+            {
+                newCar = new Car
+                {
+                    CarId = cars.Count > 0 ? cars[^1].CarId + 1 : 1,
+                    Brand = txtBrand.Text.Trim(),
+                    Model = txtModel.Text.Trim(),
+                    PricePerDay = price,
+                    ImagePath = relativeImagePath
+                };
+            }
 
             cars.Add(newCar);
 
-            // Save back to JSON
-            string updatedJson = JsonSerializer.Serialize(cars, new JsonSerializerOptions { WriteIndented = true });
+
+            var jsonElements = new List<Dictionary<string, object>>();
+
+            foreach (var car in cars)
+            {
+                var carData = new Dictionary<string, object>
+                {
+                    ["CarId"] = car.CarId,
+                    ["Brand"] = car.Brand,
+                    ["Model"] = car.Model,
+                    ["PricePerDay"] = car.PricePerDay,
+                    ["ImagePath"] = car.ImagePath
+                };
+
+                // If it's a LuxuryCar, add the LuxuryTaxRate
+                if (car is LuxuryCar luxuryCar)
+                    carData["LuxuryTaxRate"] = luxuryCar.LuxuryTaxRate;
+
+                jsonElements.Add(carData);
+            }
+
+            // Serialize manually
+            string updatedJson = JsonSerializer.Serialize(jsonElements, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(carsFilePath, updatedJson);
 
-            MessageBox.Show("Car added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            
 
-            this.DialogResult = DialogResult.OK;  // notify CarListForm to refresh
+            MessageBox.Show("Car added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
+
+
     }
 }
