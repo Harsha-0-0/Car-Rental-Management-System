@@ -1,4 +1,5 @@
-﻿using Car_Rental_Management_System.Models;
+﻿using Car_Rental_Management_System.Utility;
+using Car_Rental_Management_System.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,11 +16,27 @@ namespace Car_Rental_Management_System.Forms
         public AddCarForm()
         {
             InitializeComponent();
+            UIStyleHelper.ApplyDefaultStyle(this);
             carsFilePath = Path.Combine(Application.StartupPath, "Data", "cars.json");
 
             btnBrowse.Click += BtnBrowse_Click;
             btnSave.Click += BtnSave_Click;
             btnCancel.Click += (s, e) => this.Close();
+
+            // Apply button styles
+            UIStyleHelper.StyleButton(btnSave, btnSave.Location);
+            UIStyleHelper.StyleButton(btnCancel, btnCancel.Location);
+            UIStyleHelper.StyleButton(btnBrowse, btnBrowse.Location);
+            UIStyleHelper.StyleLabel(lblBrand);
+            UIStyleHelper.StyleLabel(lblModel);
+            UIStyleHelper.StyleLabel(lblPrice);
+            UIStyleHelper.StyleLabel(lblImage);
+
+            checkBox1.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            checkBox1.ForeColor = Color.FromArgb(45, 45, 45);
+            checkBox1.Cursor = Cursors.Hand;
+
+
         }
 
         private void BtnBrowse_Click(object sender, EventArgs e)

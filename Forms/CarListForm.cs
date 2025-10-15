@@ -1,4 +1,5 @@
 ﻿using Car_Rental_Management_System.Data;
+using Car_Rental_Management_System.Utility;
 using Car_Rental_Management_System.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace Car_Rental_Management_System.Forms
         {
             InitializeComponent();
 
+            UIStyleHelper.ApplyDefaultStyle(this, isMainForm: true);
+
             CreateMenu();
 
             CreateDropdown();
@@ -31,10 +34,12 @@ namespace Car_Rental_Management_System.Forms
         {
             comboBox1 = new ComboBox
             {
-                Width = 180,
-                Left = 10,
-                Top = menuStrip.Bottom + 5,
-                DropDownStyle = ComboBoxStyle.DropDownList
+                Width = 300,
+                Top = menuStrip.Bottom + 10,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Segoe UI Semibold", 11, FontStyle.Regular),
+                ForeColor = Color.FromArgb(40, 40, 40),
+                BackColor = Color.White,
             };
 
             comboBox1.Items.Add("All Cars");
@@ -44,6 +49,11 @@ namespace Car_Rental_Management_System.Forms
             comboBox1.Items.Add("Sort by Price (High → Low)");
             comboBox1.SelectedIndex = 0;
 
+            // Position it at the right end
+            comboBox1.Left = this.ClientSize.Width - comboBox1.Width - 20; // 20px padding from right
+
+            // Optional: make it stay at right on resize
+            comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 
             comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
 
@@ -134,12 +144,20 @@ namespace Car_Rental_Management_System.Forms
 
         private Repository<Car> carRepo;
 
-        
-private void LoadCarsGallery()
+       
+
+
+        private void LoadCarsGallery()
     {
         flowLayoutPanel1.Controls.Clear();
+            flowLayoutPanel1.Top = comboBox1.Bottom + 20; // 20px spacing below dropdown
+            flowLayoutPanel1.Left = 0;
+            flowLayoutPanel1.Width = this.ClientSize.Width;
+            flowLayoutPanel1.Height = this.ClientSize.Height - flowLayoutPanel1.Top;
+            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
-        string filePath = Path.Combine(Application.StartupPath, "Data", "cars.json");
+
+            string filePath = Path.Combine(Application.StartupPath, "Data", "cars.json");
         carRepo = new Repository<Car>(filePath);
 
         cars = new List<Car>();

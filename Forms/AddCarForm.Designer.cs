@@ -108,7 +108,7 @@
             // 
             // btnBrowse
             // 
-            btnBrowse.Location = new Point(657, 281);
+            btnBrowse.Location = new Point(630, 280);
             btnBrowse.Name = "btnBrowse";
             btnBrowse.Size = new Size(94, 29);
             btnBrowse.TabIndex = 8;

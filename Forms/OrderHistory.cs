@@ -1,4 +1,5 @@
 ﻿using Car_Rental_Management_System.Data;
+using Car_Rental_Management_System.Utility;
 using Car_Rental_Management_System.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Car_Rental_Management_System.Forms
         public OrderHistory()
         {
             InitializeComponent();
+            UIStyleHelper.ApplyDefaultStyle(this);
         }
 
         private void OrderHistory_Load(object sender, EventArgs e)

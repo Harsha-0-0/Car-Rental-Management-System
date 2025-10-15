@@ -36,7 +36,7 @@
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.AutoScroll = true;
-            flowLayoutPanel1.BackColor = Color.LightGray;
+            flowLayoutPanel1.BackColor = Color.Transparent;
             flowLayoutPanel1.Controls.Add(comboBox1);
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(0, 0);
