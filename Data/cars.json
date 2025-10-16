@@ -13,14 +13,87 @@
     "PricePerDay": 55,
     "ImagePath": "Images/honda.jpg"
   },
-    {
-      "CarId": 3,
-      "Brand": "BMW",
-      "Model": "X5",
-      "PricePerDay": 120,
-      "ImagePath": "Images/bmw.jpg",
-      "LuxuryTaxRate": 0.2
-    }
-  
-
+  {
+    "CarId": 3,
+    "Brand": "BMW",
+    "Model": "X5",
+    "PricePerDay": 120,
+    "ImagePath": "Images/bmw.jpg",
+    "LuxuryTaxRate": 0.2
+  },
+  {
+    "CarId": 4,
+    "Brand": "Toyota",
+    "Model": "86",
+    "PricePerDay": 600,
+    "ImagePath": "Images/86.jpg",
+    "LuxuryTaxRate": 0.15
+  },
+  {
+    "CarId": 5,
+    "Brand": "BMW",
+    "Model": "X1",
+    "PricePerDay": 250,
+    "ImagePath": "Images/bmw1.jpg",
+    "LuxuryTaxRate": 0.15
+  },
+  {
+    "CarId": 6,
+    "Brand": "BMW",
+    "Model": "3 Series",
+    "PricePerDay": 400,
+    "ImagePath": "Images/bmw3.jpg",
+    "LuxuryTaxRate": 0.15
+  },
+  {
+    "CarId": 7,
+    "Brand": "Toyota",
+    "Model": "Camry",
+    "PricePerDay": 210,
+    "ImagePath": "Images/camry.jpg"
+  },
+  {
+    "CarId": 8,
+    "Brand": "Mazda",
+    "Model": "CX 5",
+    "PricePerDay": 100,
+    "ImagePath": "Images/cx5.jpg"
+  },
+  {
+    "CarId": 9,
+    "Brand": "Hyundai",
+    "Model": "Elantra",
+    "PricePerDay": 240,
+    "ImagePath": "Images/elantra.jpg"
+  },
+  {
+    "CarId": 10,
+    "Brand": "Ford",
+    "Model": "Escape",
+    "PricePerDay": 150,
+    "ImagePath": "Images/escape.jpg"
+  },
+  {
+    "CarId": 11,
+    "Brand": "Ford",
+    "Model": "Mustang",
+    "PricePerDay": 500,
+    "ImagePath": "Images/mustang.jpg",
+    "LuxuryTaxRate": 0.15
+  },
+  {
+    "CarId": 12,
+    "Brand": "Honda",
+    "Model": "CRV",
+    "PricePerDay": 420,
+    "ImagePath": "Images/honda crv.jpg"
+  },
+  {
+    "CarId": 13,
+    "Brand": "Hyundai",
+    "Model": "Genesis",
+    "PricePerDay": 390,
+    "ImagePath": "Images/genesis.jpg",
+    "LuxuryTaxRate": 0.15
+  }
 ]
