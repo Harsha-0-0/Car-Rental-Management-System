@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <Content Include="Data\cars.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\86.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -175,34 +175,63 @@ namespace Car_Rental_Management_System.Forms
             string json = File.ReadAllText(filePath);
             JsonDocument doc = JsonDocument.Parse(json);
 
-            foreach (var element in doc.RootElement.EnumerateArray())
-            {
-                if (element.TryGetProperty("LuxuryTaxRate", out var taxProp))
+                foreach (var element in doc.RootElement.EnumerateArray())
                 {
-                    cars.Add(new LuxuryCar
+                    // Read shared fields
+                    int carId = element.GetProperty("CarId").GetInt32();
+                    string brand = element.GetProperty("Brand").GetString();
+                    string model = element.GetProperty("Model").GetString();
+                    decimal pricePerDay = element.GetProperty("PricePerDay").GetDecimal();
+                    string imagePath = element.GetProperty("ImagePath").GetString();
+
+                    // Read specifications list safely
+                    List<string> specifications = new List<string>();
+                    if (element.TryGetProperty("Specifications", out JsonElement specsArray) && specsArray.ValueKind == JsonValueKind.Array)
                     {
-                        CarId = element.GetProperty("CarId").GetInt32(),
-                        Brand = element.GetProperty("Brand").GetString(),
-                        Model = element.GetProperty("Model").GetString(),
-                        PricePerDay = element.GetProperty("PricePerDay").GetDecimal(),
-                        ImagePath = element.GetProperty("ImagePath").GetString(),
-                        LuxuryTaxRate = taxProp.GetDecimal()
-                    });
-                }
-                else
-                {
-                    cars.Add(new Car
+                        foreach (var spec in specsArray.EnumerateArray())
+                            specifications.Add(spec.GetString());
+                    }
+
+                    // Read features list safely
+                    List<string> features = new List<string>();
+                    if (element.TryGetProperty("Features", out JsonElement featArray) && featArray.ValueKind == JsonValueKind.Array)
                     {
-                        CarId = element.GetProperty("CarId").GetInt32(),
-                        Brand = element.GetProperty("Brand").GetString(),
-                        Model = element.GetProperty("Model").GetString(),
-                        PricePerDay = element.GetProperty("PricePerDay").GetDecimal(),
-                        ImagePath = element.GetProperty("ImagePath").GetString()
-                    });
+                        foreach (var feat in featArray.EnumerateArray())
+                            features.Add(feat.GetString());
+                    }
+
+                    // Check for luxury car
+                    if (element.TryGetProperty("LuxuryTaxRate", out JsonElement taxProp))
+                    {
+                        cars.Add(new LuxuryCar
+                        {
+                            CarId = carId,
+                            Brand = brand,
+                            Model = model,
+                            PricePerDay = pricePerDay,
+                            ImagePath = imagePath,
+                            LuxuryTaxRate = taxProp.GetDecimal(),
+                            Specifications = specifications,
+                            Features = features
+                        });
+                    }
+                    else
+                    {
+                        cars.Add(new Car
+                        {
+                            CarId = carId,
+                            Brand = brand,
+                            Model = model,
+                            PricePerDay = pricePerDay,
+                            ImagePath = imagePath,
+                            Specifications = specifications,
+                            Features = features
+                        });
+                    }
                 }
+
             }
-        }
-        catch (Exception ex)
+            catch (Exception ex)
         {
             MessageBox.Show("Error reading cars.json: " + ex.Message);
             return;
@@ -294,19 +323,19 @@ namespace Car_Rental_Management_System.Forms
                     ForeColor = Color.DarkGreen
                 };
                 card.Controls.Add(lblPrice);
-                // Example for button:
+                // Button
                 Button btn = new Button
                 {
                     Text = "View Details",
                     Width = 140,
                     Height = 35,
                     Top = 240,
-                    Left = 40,
-                    BackColor = Color.LightSkyBlue,
-                    FlatStyle = FlatStyle.Flat,
-                    Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                    Left = (card.ClientSize.Width - 140) / 2, // center using ClientSize
                     Tag = car
                 };
+
+
+                UIStyleHelper.StyleButton(btn, new Point(btn.Left, btn.Top), new Size(btn.Width, btn.Height));
                 btn.Click += Btn_Click;
                 card.Controls.Add(btn);
 

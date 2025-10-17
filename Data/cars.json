@@ -4,14 +4,18 @@
     "Brand": "Toyota",
     "Model": "Corolla",
     "PricePerDay": 50,
-    "ImagePath": "Images/toyota.jpg"
+    "ImagePath": "Images/toyota.jpg",
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: Automatic", "Mileage: 32 MPG" ],
+    "Features": [ "Bluetooth", "Air Conditioning", "Backup Camera", "Cruise Control" ]
   },
   {
     "CarId": 2,
     "Brand": "Honda",
     "Model": "Civic",
     "PricePerDay": 55,
-    "ImagePath": "Images/honda.jpg"
+    "ImagePath": "Images/honda.jpg",
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: CVT", "Mileage: 30 MPG" ],
+    "Features": [ "Bluetooth", "Heated Seats", "Apple CarPlay", "Rear Camera" ]
   },
   {
     "CarId": 3,
@@ -19,7 +23,9 @@
     "Model": "X5",
     "PricePerDay": 120,
     "ImagePath": "Images/bmw.jpg",
-    "LuxuryTaxRate": 0.2
+    "LuxuryTaxRate": 0.2,
+    "Specifications": [ "Fuel Type: Diesel", "Seats: 5", "Transmission: Automatic", "Mileage: 25 MPG" ],
+    "Features": [ "GPS Navigation", "Leather Seats", "Panoramic Sunroof", "Premium Sound" ]
   },
   {
     "CarId": 4,
@@ -27,7 +33,9 @@
     "Model": "86",
     "PricePerDay": 600,
     "ImagePath": "Images/86.jpg",
-    "LuxuryTaxRate": 0.15
+    "LuxuryTaxRate": 0.15,
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 2", "Transmission: Manual", "Horsepower: 205 HP" ],
+    "Features": [ "Sport Mode", "Touch Display", "Rear Camera", "Push Start" ]
   },
   {
     "CarId": 5,
@@ -35,7 +43,9 @@
     "Model": "X1",
     "PricePerDay": 250,
     "ImagePath": "Images/bmw1.jpg",
-    "LuxuryTaxRate": 0.15
+    "LuxuryTaxRate": 0.15,
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: Automatic", "Mileage: 26 MPG" ],
+    "Features": [ "Leather Interior", "Auto Climate Control", "Keyless Entry", "LED Headlights" ]
   },
   {
     "CarId": 6,
@@ -43,35 +53,45 @@
     "Model": "3 Series",
     "PricePerDay": 400,
     "ImagePath": "Images/bmw3.jpg",
-    "LuxuryTaxRate": 0.15
+    "LuxuryTaxRate": 0.15,
+    "Specifications": [ "Fuel Type: Diesel", "Seats: 5", "Transmission: Automatic", "Mileage: 27 MPG" ],
+    "Features": [ "Adaptive Cruise Control", "Digital Display", "Heated Steering Wheel", "Parking Sensors" ]
   },
   {
     "CarId": 7,
     "Brand": "Toyota",
     "Model": "Camry",
     "PricePerDay": 210,
-    "ImagePath": "Images/camry.jpg"
+    "ImagePath": "Images/camry.jpg",
+    "Specifications": [ "Fuel Type: Hybrid", "Seats: 5", "Transmission: Automatic", "Mileage: 34 MPG" ],
+    "Features": [ "Lane Assist", "Wireless Charging", "LED Lights", "Rear Camera" ]
   },
   {
     "CarId": 8,
     "Brand": "Mazda",
     "Model": "CX 5",
     "PricePerDay": 100,
-    "ImagePath": "Images/cx5.jpg"
+    "ImagePath": "Images/cx5.jpg",
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: Automatic", "Mileage: 29 MPG" ],
+    "Features": [ "Apple CarPlay", "Heated Mirrors", "Blind Spot Monitoring", "Cruise Control" ]
   },
   {
     "CarId": 9,
     "Brand": "Hyundai",
     "Model": "Elantra",
     "PricePerDay": 240,
-    "ImagePath": "Images/elantra.jpg"
+    "ImagePath": "Images/elantra.jpg",
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: Automatic", "Mileage: 33 MPG" ],
+    "Features": [ "Smart Key", "Touch Display", "Android Auto", "Climate Control" ]
   },
   {
     "CarId": 10,
     "Brand": "Ford",
     "Model": "Escape",
     "PricePerDay": 150,
-    "ImagePath": "Images/escape.jpg"
+    "ImagePath": "Images/escape.jpg",
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: Automatic", "Mileage: 28 MPG" ],
+    "Features": [ "Rear Camera", "Voice Control", "Bluetooth", "Cruise Control" ]
   },
   {
     "CarId": 11,
@@ -79,14 +99,18 @@
     "Model": "Mustang",
     "PricePerDay": 500,
     "ImagePath": "Images/mustang.jpg",
-    "LuxuryTaxRate": 0.15
+    "LuxuryTaxRate": 0.15,
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 2", "Transmission: Manual", "Horsepower: 450 HP" ],
+    "Features": [ "Sport Suspension", "Performance Mode", "Leather Seats", "Premium Sound" ]
   },
   {
     "CarId": 12,
     "Brand": "Honda",
     "Model": "CRV",
     "PricePerDay": 420,
-    "ImagePath": "Images/honda crv.jpg"
+    "ImagePath": "Images/honda crv.jpg",
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: Automatic", "Mileage: 28 MPG" ],
+    "Features": [ "Adaptive Cruise", "Heated Seats", "Rear Parking Sensors", "Smart Display" ]
   },
   {
     "CarId": 13,
@@ -94,6 +118,8 @@
     "Model": "Genesis",
     "PricePerDay": 390,
     "ImagePath": "Images/genesis.jpg",
-    "LuxuryTaxRate": 0.15
+    "LuxuryTaxRate": 0.15,
+    "Specifications": [ "Fuel Type: Petrol", "Seats: 5", "Transmission: Automatic", "Horsepower: 365 HP" ],
+    "Features": [ "Ambient Lighting", "Premium Sound", "Sunroof", "Wireless Charging" ]
   }
 ]

@@ -17,6 +17,9 @@ namespace Car_Rental_Management_System.Forms
         private Label lblBrand, lblModel, lblPrice, lblType, lblRating, lblAvailability, lblSpecsTitle, lblFeaturesTitle;
         private FlowLayoutPanel pnlSpecs, pnlFeatures;
         private Button btnRent, btnWishlist, btnClose;
+        private Label lblRatingTitle;
+        private ProgressBar ratingBar;
+
 
         public CarDetailsForm(Car car)
         {
@@ -172,6 +175,31 @@ namespace Car_Rental_Management_System.Forms
 
             btnClose.Click += (s, e) => this.Close();
             Controls.Add(btnClose);
+
+            // Rating Title
+            lblRatingTitle = new Label
+            {
+                Text = "Customer Rating:",
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                ForeColor = Color.Black,
+                Location = new Point(370, 225),
+                AutoSize = true
+            };
+            Controls.Add(lblRatingTitle);
+
+            // Rating Progress Bar
+            ratingBar = new ProgressBar
+            {
+                Location = new Point(370, 255),
+                Size = new Size(200, 20),
+                Minimum = 0,
+                Maximum = 5,
+                Style = ProgressBarStyle.Continuous,
+                BackColor = Color.White
+            };
+            
+            Controls.Add(ratingBar);
+
         }
 
         private void DisplayCarDetails()
@@ -191,31 +219,35 @@ namespace Car_Rental_Management_System.Forms
                 lblType.ForeColor = Color.Gray;
             }
 
-            // Random rating for demo (you can replace with real data later)
-            int rating = new Random().Next(3, 6);
-            lblRating.Text = $"Rating: {"★".PadRight(rating, '★').PadRight(5, '☆')}";
+            lblAvailability.Text = "Available for Rent";
 
-            lblAvailability.Text = "✅ Available for Rent";
+            int rating = new Random().Next(0, 6);
+            ratingBar.Value = rating;
 
-            // Image
+
             string fullPath = Path.Combine(Application.StartupPath, selectedCar.ImagePath);
             if (File.Exists(fullPath))
                 pictureBoxCar.Image = Image.FromFile(fullPath);
             else
                 pictureBoxCar.BackColor = Color.LightGray;
 
-            // Sample specs
-            AddSpec("Fuel Type: Petrol");
-            AddSpec("Seats: 5");
-            AddSpec("Transmission: Automatic");
-            AddSpec("Mileage: 25 MPG");
+            pnlSpecs.Controls.Clear();
+            pnlFeatures.Controls.Clear();
 
-            // Sample features
-            AddFeature("Bluetooth");
-            AddFeature("GPS Navigation");
-            AddFeature("Backup Camera");
-            AddFeature("Air Conditioning");
+            if (selectedCar.Specifications != null)
+            {
+                foreach (var spec in selectedCar.Specifications)
+                    AddSpec(spec);
+            }
+
+            if (selectedCar.Features != null)
+            {
+                foreach (var feature in selectedCar.Features)
+                    AddFeature(feature);
+            }
         }
+
+
 
         private void AddSpec(string text)
         {
@@ -223,9 +255,11 @@ namespace Car_Rental_Management_System.Forms
             {
                 Text = text,
                 Font = new Font("Segoe UI", 10),
-                ForeColor = Color.DimGray,
+                ForeColor = Color.Black,
                 AutoSize = true,
-                Padding = new Padding(5)
+                BackColor = Color.LightGray,
+                Padding = new Padding(5, 2, 5, 2),
+                Margin = new Padding(5),
             };
             pnlSpecs.Controls.Add(lbl);
         }

@@ -10,6 +10,8 @@ namespace Car_Rental_Management_System.Models
         public string Model { get; set; }
         public decimal PricePerDay { get; set; }
         public string ImagePath { get; set; }
+        public List<string> Specifications { get; set; } = new List<string>();
+        public List<string> Features { get; set; } = new List<string>();
 
         // Implement interface method
         public virtual decimal CalculatePrice(decimal baseRate, int days)
