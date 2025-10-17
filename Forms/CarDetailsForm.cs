@@ -88,7 +88,7 @@ namespace Car_Rental_Management_System.Forms
             // Availability
             lblAvailability = new Label
             {
-                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
                 ForeColor = Color.MediumSeaGreen,
                 Location = new Point(370, 195),
                 AutoSize = true
